@@ -1,8 +1,10 @@
-import express from 'express';
-import { gamesRouter } from './games/games.controller';
+import * as express from 'express';
+import { gamesRouter } from '../routes/games/games.router';
+import { dealsRouter } from '../routes/deals/deals.router';
 
-const apiRouter = express.Router();
+const api = express();
 
-apiRouter.use('/games', gamesRouter);
+api.use('/games', gamesRouter);
+api.use('/deals', dealsRouter);
 
-export { apiRouter };
+export { api };

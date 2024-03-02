@@ -4,10 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "vite",
+    "start": "node dist/server.js",
     "dev": "vite",
     "build": "cross-env BUILD_PATH=../server/public tsc && vite build",
-    "test": "vite test"
+    "test": "vite test",
+    "deploy": "npm run build && tsc && npm start"
   },
   "dependencies": {
     "axios": "^1.6.7",

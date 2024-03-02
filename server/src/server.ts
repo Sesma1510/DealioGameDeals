@@ -1,5 +1,5 @@
 import "dotenv/config";
-import http from "http";
+import * as http from "http";
 import { app } from "./app";
 import { mongoConnect, mongoDisconnect } from "./services/mongo";
 
