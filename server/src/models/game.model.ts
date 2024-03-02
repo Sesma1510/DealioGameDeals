@@ -1,51 +1,13 @@
-import mongoose, { Schema, Document } from "mongoose";
 import axios from "axios";
 
-export interface IGame extends Document {
-  title: string;
-  gameId: string; // CheapShark's gameID
-  developers?: string[];
-  publishers?: string[];
-  releaseDate?: Date;
-  genres?: string[];
-  price: {
-    currentPrice: number;
-    historicalLow: number;
-  };
-  platforms?: string[];
-  imageUrl?: string;
-  storeLinks?: [{
-    storeId: string;
-    url: string;
-  }];
-}
-
-const GameSchema: Schema = new Schema({
-  title: { type: String, required: true },
-  gameId: { type: String, required: true, unique: true },
-  developers: [{ type: String }],
-  publishers: [{ type: String }],
-  releaseDate: { type: Date },
-  genres: [{ type: String }],
-  price: {
-    currentPrice: { type: Number, required: true },
-    historicalLow: { type: Number, required: true },
-  },
-  platforms: [{ type: String }],
-  imageUrl: { type: String },
-  storeLinks: [{
-    storeId: { type: String, required: true },
-    url: { type: String, required: true },
-  }],
-});
-
-
-const CHEAPSHARK_API_URL = 'https://www.cheapshark.com/api/1.0/games';
+const CHEAPSHARK_BASE_URL = 'https://www.cheapshark.com/api';
+const API_VERSION = '1.0'; // This makes it easy to update the API version
+const gamesEndpoint = `${CHEAPSHARK_BASE_URL}/${API_VERSION}/games`;
 
 // Function to search games by title using the CheapShark API
 async function searchGamesByTitle(title: string) {
   try {
-    const response = await axios.get(`${CHEAPSHARK_API_URL}`, {
+    const response = await axios.get(gamesEndpoint, {
       params: { title: title, limit: 60 },
     });
 
@@ -66,6 +28,5 @@ async function fetchGameByTitle(title: string) {
   return games; // Returns the games data directly
 }
 
-const Game = mongoose.model<IGame>('Game', GameSchema);
 
 export { fetchGameByTitle };

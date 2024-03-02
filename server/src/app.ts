@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import * as cors from "cors";
 import * as morgan from "morgan";
 import * as path from "path";
-import { gamesRouter } from "./routes/games/games.controller";
+import { api } from "./routes/api";
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use(morgan('combined'));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-app.use('/api/games', gamesRouter);
+app.use('/api', api);
 
 // Fallback para SPA
 app.get('/*', (req: Request, res: Response) => {
