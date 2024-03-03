@@ -1,17 +1,15 @@
-// import "./App.css";
-import {Route } from "react-router-dom";
 import{
-  createBrowserRouter, 
-  createRoutesFromElements, 
-  RouterProvider
-} from "react-router-dom"
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+  Route
+} from "react-router-dom";
 import Home from './pages/Home/Home'
-
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<Home></Home>}>
-      <Route 
+      <Route
         path="/"
         element={
           <>
@@ -24,7 +22,7 @@ const router = createBrowserRouter(
 )
 function App() {
   return <RouterProvider router={router}/>
-  
+
 }
 
 export default App;

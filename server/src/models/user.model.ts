@@ -1,24 +1,33 @@
-import mongoose, {Schema, Document} from "mongoose";
+import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
+import { User } from './user.mongo';
 
-interface IUser extends Document {
-  username: string;
-  email: string;
-  password: string;
-  profileImage: string;
-  favoriteGames: Array<{ gameId: string; title: string; }>;
+async function registerUser(username: string, email: string, password: string): Promise<any> {
+  const hashedPassword = await bcrypt.hash(password, 12);
+
+  const newUser = new User({
+    username,
+    email,
+    password: hashedPassword
+  });
+
+  await newUser.save();
+  return newUser;
 }
 
-const UserSchema: Schema = new Schema({
-  username: { type: String, required: true },
-  email: { type: String, required: true },
-  password: { type: String, required: true },
-  profileImage: { type: String, required: false },
-  favoriteGames: [{
-    gameId: { type: String, required: true },
-    title: { type: String, required: true },
-  }],
-});
+async function authenticateUser(email: string, password: string): Promise<string> {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new Error('User not found');
+  }
 
-const User = mongoose.model<IUser>("User", UserSchema);
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    throw new Error('Password is incorrect');
+  }
 
-export {User};
+  const token = jwt.sign({ userId: user.id }, 'YOUR_SECRET_KEY', { expiresIn: '1h' });
+  return token;
+}
+
+export { registerUser, authenticateUser };
