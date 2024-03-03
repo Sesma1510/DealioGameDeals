@@ -1,48 +1,56 @@
+
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
+import * as Joi from 'joi';
 import { User } from './user.mongo';
-import 'dotenv/config';
 
-async function registerUser(username: string, email: string, password: string): Promise<any> {
-  const hashedPassword = await bcrypt.hash(password, 12);
+// Input validation for registration
+const registerSchema = Joi.object({
+  username: Joi.string().required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(8).required()
+});
 
-  const newUser = new User({
-    username,
-    email,
+async function registerUser(userData) {
+  // Validate request body
+  await registerSchema.validateAsync(userData);
+
+  const existingUser = await User.findOne({ email: userData.email });
+  if (existingUser) throw new Error('Email already exists');
+
+  const hashedPassword = await bcrypt.hash(userData.password, 10);
+
+  const user = new User({
+    username: userData.username,
+    email: userData.email,
     password: hashedPassword
   });
 
-  await newUser.save();
-  return newUser;
+  await user.save();
+  return user;
 }
 
-const secretKey = process.env.SECRET_KEY;
+// Input validation for login
+const loginSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required()
+});
 
-async function authenticateUser(email: string, password: string): Promise<string> {
-const user = await User.findOne({ email }).select('+password');
-  if (!user) {
-    throw new Error('User not found');
-  }
+async function authenticate(email, password) {
+  const { error } = loginSchema.validate({ email, password });
+  if (error) throw error;
 
-  // Check if user password is undefined
-  if (!user.password) {
-    throw new Error('User password not found');
-  }
+  const user = await User.findOne({ email }).select('+password');
+  if (!user) throw new Error('User not found');
 
-  // Check if provided password is a valid string
-  if (!password || typeof password !== 'string') {
-    throw new Error('Invalid password');
-  }
-
-  // Compare passwords using bcrypt
   const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    throw new Error('Password is incorrect');
-  }
+  if (!isMatch) throw new Error('Incorrect password');
 
-  const token = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' });
+  const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
+    expiresIn: '1h'
+  });
+
   return token;
 }
 
-
-export { registerUser, authenticateUser };
+export { registerUser, authenticate };
