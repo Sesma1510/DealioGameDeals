@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "vite",
     "dev": "vite",
     "build": "cross-env BUILD_PATH=../server/public tsc && vite build",
     "test": "vite test",

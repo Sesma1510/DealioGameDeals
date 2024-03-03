@@ -1,4 +1,3 @@
-
 import { Request, Response } from 'express';
 import { registerUser, authenticateUser } from '../../models/user.model';
 
