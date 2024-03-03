@@ -1,5 +1,6 @@
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import 'dotenv/config';
 
 import { RequestWithUser } from '../types/types';
 
@@ -10,7 +11,7 @@ function authMiddleware(req: RequestWithUser, res: Response, next: NextFunction)
       throw new Error('Authentication failed!');
     }
 
-    const decodedToken: any = jwt.verify(token, process.env.JWT_SECRET!);
+    const decodedToken: any = jwt.verify(token, process.env.SECRET_kEY!);
     req.userId = decodedToken.userId;
     next();
   } catch (err) {
