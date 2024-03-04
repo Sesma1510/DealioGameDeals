@@ -13,13 +13,13 @@ app.use(cors({
 app.use(morgan('combined'));
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname,'public')));
+app.use(express.static(path.join(__dirname, '..', 'client' ,'public')));
 
-app.use('/api', api);
+app.use('/', api);
 
 // Fallback para SPA
 app.get('/*', (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
 });
 
 export { app };
