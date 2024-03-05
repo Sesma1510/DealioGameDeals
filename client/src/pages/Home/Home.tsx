@@ -1,4 +1,4 @@
-import {Card, CardHeader, CardFooter, Image, Button} from "@nextui-org/react";
+import {Card, CardHeader, Image } from "@nextui-org/react";
 import '../Home/Home.css'
 
 const Home = () => {

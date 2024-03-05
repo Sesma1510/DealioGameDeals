@@ -4,6 +4,6 @@ import { getDeals } from './deals.controller';
 
 const dealsRouter = express.Router();
 
-dealsRouter.get('/', authMiddleware ,getDeals);
+dealsRouter.get('/', authMiddleware, getDeals);
 
 export { dealsRouter }

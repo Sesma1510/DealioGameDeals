@@ -32,7 +32,7 @@ export default function App() {
         </NavbarItem>
         <NavbarItem>
           <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
+           <Link href="/signup">Sign Up</Link>
           </Button>
         </NavbarItem>
       </NavbarContent>
