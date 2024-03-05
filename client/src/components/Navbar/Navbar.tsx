@@ -9,7 +9,7 @@ export default function App() {
         <AcmeLogo />
         <p className="font-bold text-inherit">DEALIO</p>
       </NavbarBrand>
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      {/* <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
           <Link color="foreground" href="#">
             Features
@@ -25,14 +25,14 @@ export default function App() {
             Integrations
           </Link>
         </NavbarItem>
-      </NavbarContent>
+      </NavbarContent> */}
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
           <Link href="#">Login</Link>
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-           <Link href="/signup">Sign Up</Link>
+          <Button as={Link} color="primary" href="/signup" variant="flat">
+            Sign up
           </Button>
         </NavbarItem>
       </NavbarContent>

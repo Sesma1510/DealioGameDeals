@@ -3,7 +3,7 @@ import Root from './pages/Root/Root';
 import CustomNavbar from './components/Navbar/Navbar';
 import Home from './pages/Home/Home';
 import {SignUpForm}  from './components/Auth/SignUp';
-
+import Footer from './components/Footer/Footer'
 function App() {
   return (
     <Router>
@@ -15,6 +15,7 @@ function App() {
               <>
                 <CustomNavbar />
                 <Home />
+                <Footer/>
               </>
             }
           />
