@@ -33,5 +33,4 @@ async function fetchDeals(params: FetchDealsParams) {
   }
 }
 
-
 export { fetchDeals };

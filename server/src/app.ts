@@ -4,8 +4,11 @@ import * as cors from "cors";
 import * as morgan from "morgan";
 import * as path from "path";
 import { api } from "./routes/api";
+import { limiter } from "./middleware/rateLimiter";
 
 const app = express();
+
+app.use(limiter);
 
 app.use(cors({
   origin: 'http://localhost:5173',
