@@ -20,3 +20,10 @@
 .cards{
     margin-bottom: 30px;
 }
+
+.tables{
+    
+    display: flex;
+    flex-direction: row;
+    
+}

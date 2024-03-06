@@ -1082,6 +1082,10 @@ video {
   min-height: var(--nextui-spacing-unit-8);
 }
 
+.min-h-\[222px\] {
+  min-height: 222px;
+}
+
 .w-1 {
   width: 0.25rem;
 }
@@ -2536,6 +2540,21 @@ video {
   line-height: 1.75rem;
 }
 
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
 .font-bold {
   font-weight: 700;
 }
@@ -2550,6 +2569,10 @@ video {
 
 .uppercase {
   text-transform: uppercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
 }
 
 .\!text-danger {
