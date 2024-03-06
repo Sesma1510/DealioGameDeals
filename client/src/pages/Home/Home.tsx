@@ -1,23 +1,47 @@
-import { useState, useEffect } from 'react';
-import { Card, CardHeader, Image } from "@nextui-org/react";
-import { getGames } from '../../services/apiService';
+import React, { useState, useEffect } from 'react';
+import { getDeals, getStores } from '../../services/apiService';
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, getKeyValue } from "@nextui-org/react";
 
 interface Game {
   gameID: string;
-  external: string;
+  title: string;
   thumb: string;
+  salePrice: string;
+  normalPrice: string;
+  storeID: number;
+}
+
+interface Store {
+  storeID: number;
+  storeName: string;
+  image: string;
 }
 
 const Home: React.FC = () => {
-  const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [stores, setStores] = useState<Store[]>([]);
+  const [storeGames, setStoreGames] = useState<{ [key: number]: Game[] }>({});
+  const [page, setPage] = React.useState<{ [key: number]: number }>({});
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const fetchedGames: Game[] = await getGames(``);
-        setGames(fetchedGames);
+        const fetchedStores: Store[] = await getStores();
+        setStores(fetchedStores);
+
+        // Obtener juegos para cada tienda
+        const gamesByStore: { [key: number]: Game[] } = {};
+        const initialPage: { [key: number]: number } = {};
+
+        for (const store of fetchedStores) {
+          const games = await getDeals(store.storeID);
+          gamesByStore[store.storeID] = games;
+          initialPage[store.storeID] = 1;
+        }
+
+        setStoreGames(gamesByStore);
+        setPage(initialPage);
         setLoading(false);
       } catch (error) {
         if (error instanceof Error) {
@@ -32,25 +56,59 @@ const Home: React.FC = () => {
     fetchData();
   }, []);
 
+  const handlePageChange = (storeID: number, newPage: number) => {
+    setPage((prevPages) => ({ ...prevPages, [storeID]: newPage }));
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="max-w-[100%] gap-1 grid grid-cols-12 grid-rows-1 px-8 space-x-0 cards">
-      {games.map((game: Game, index: number) => (
-        <Card key={index} className="col-span-12 sm:col-span-2 h-[300px] w-[200px]">
-          <CardHeader className="absolute z-10 top-1 flex-col !items-start">
-            <p className="text-tiny text-white/60 uppercase font-bold">{game.external}</p>
-          </CardHeader>
-          <Image
-            removeWrapper
-            alt={`${game.external} background`}
-            className="z-0 w-full h-full object-cover rounded-md"
-            src={game.thumb}
-          />
-        </Card>
-      ))}
-    </div>
+    <>
+{stores.map((store) => (
+  <div key={store.storeID} className='tables'>
+    <h2>{store.storeName}</h2>
+    {storeGames[store.storeID]?.length > 0 ? (
+      <Table
+        aria-label={`Table for ${store.storeName}`}
+        bottomContent={
+          <div className="flex w-full justify-center">
+            <Pagination
+              isCompact
+              showControls
+              showShadow
+              color="secondary"
+              page={page[store.storeID]}
+              total={Math.ceil(storeGames[store.storeID]?.length / 4)}
+              onChange={(newPage) => handlePageChange(store.storeID, newPage)}
+            />
+          </div>
+        }
+        classNames={{
+          wrapper: "min-h-[222px]",
+        }}
+      >
+        <TableHeader>
+          {/* <TableColumn key="gameID">Game ID</TableColumn> */}
+          <TableColumn key="title">Title</TableColumn>
+          <TableColumn key="salePrice">Sale Price(US$)</TableColumn>
+          <TableColumn key="normalPrice">Normal Price(US$)</TableColumn>
+          {/* Add other columns based on your Game interface */}
+        </TableHeader>
+        <TableBody items={storeGames[store.storeID]?.slice((page[store.storeID] - 1) * 4, page[store.storeID] * 4)}>
+          {(item) => (
+            <TableRow key={item.gameID}>
+              {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    ) : (
+      <></>
+    )}
+  </div>      
+  ))}
+    </>
   );
 };
 
