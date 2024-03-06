@@ -1,9 +1,19 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const baseURL = 'http://localhost:8000/games';
+interface Game {
+  gameID: string;
+  external: string;
+  thumb: string;
+}
 
-const apiService = axios.create({baseURL})
-
-
-export const getGames = async (title:string) => await apiService.get(`/:${title}`)
-  
+export const getGames = async (title: string): Promise<Game[]> => {
+try {
+  const response = await axios.get(`http://localhost:8000/games`, {
+    params: { title: title || `lego` },
+  });
+  return response.data;
+} catch (error) {
+  console.error('Error fetching games:', error);
+  throw error;
+}
+};

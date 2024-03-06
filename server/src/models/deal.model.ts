@@ -1,18 +1,27 @@
 import axios from "axios";
+import { FetchDealsParams } from "../types/types";
 
-// Define API base URL and version
-const CHEAPSHARK_BASE_URL = 'https://www.cheapshark.com/api';
-const API_VERSION = '1.0'; // This makes it easy to update the API version
-const dealsEndpoint = `${CHEAPSHARK_BASE_URL}/${API_VERSION}/deals`;
+const BASE_URL = 'https://www.cheapshark.com/api';
+const API_VERSION = '1.0';
 
-async function fetchDeals(storeID: string, upperPrice: string) {
+async function fetchDeals(params: FetchDealsParams) {
   try {
-    const response = await axios.get(dealsEndpoint, {
-      params: { storeID, upperPrice },
-    });
+    if (params.dealID) {
+      const dealDetailsEndpoint = `${BASE_URL}/${API_VERSION}/deal`;
+      const response = await axios.get(dealDetailsEndpoint, { params: { id: params.dealID } });
+
+      if (response.status === 200) {
+        return [response.data]; // Wrapping in an array for consistency
+      } else {
+        console.log("Failed to fetch deal by ID. Status:", response.status);
+        return [];
+      }
+    }
+
+    const dealsListEndpoint = `${BASE_URL}/${API_VERSION}/deals`;
+    const response = await axios.get(dealsListEndpoint, { params });
 
     if (response.status === 200) {
-      console.log("Deals fetched successfully:", response.data);
       return response.data;
     } else {
       console.log("Failed to fetch deals. Status:", response.status);
@@ -24,4 +33,5 @@ async function fetchDeals(storeID: string, upperPrice: string) {
   }
 }
 
-export { fetchDeals  };
+
+export { fetchDeals };

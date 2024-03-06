@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const CHEAPSHARK_BASE_URL = 'https://www.cheapshark.com/api';
+const BASE_URL = 'https://www.cheapshark.com/api';
 const API_VERSION = '1.0';
-const gamesEndpoint = `${CHEAPSHARK_BASE_URL}/${API_VERSION}/games`;
+const gamesEndpoint = `${BASE_URL}/${API_VERSION}/games`;
 
 async function searchGamesByTitle(title: string) {
   try {

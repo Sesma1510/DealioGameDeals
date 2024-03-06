@@ -4,8 +4,6 @@ import { fetchGamesList } from './games.controller';
 
 const gamesRouter = express.Router();
 
-// gamesRouter.get('/', authMiddleware, fetchGamesList);
-gamesRouter.get('/:gameName', fetchGamesList);
-
+gamesRouter.get('/', fetchGamesList);
 
 export { gamesRouter }
