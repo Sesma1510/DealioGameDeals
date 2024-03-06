@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { fetchGameByTitle } from '../../models/game.model';
 
 async function fetchGamesList(req: Request, res: Response) {

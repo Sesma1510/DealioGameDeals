@@ -1,21 +1,20 @@
 import { Request, Response } from 'express';
+import { FetchDealsParams } from '../../types/types';
 import { fetchDeals } from '../../models/deal.model';
 
-async function getDeals(req: Request, res: Response) {
+async function handleDealsRequest(req: Request, res: Response) {
   try {
-    const { storeID, upperPrice } = req.query;
+      // Convert query parameters to the expected type
+      const params: FetchDealsParams = Object.fromEntries(Object.entries(req.query)) as FetchDealsParams;
 
-    // Validate query parameters
-    if (!storeID || !upperPrice) {
-      return res.status(400).json({ error: 'Missing required query parameters: storeID and upperPrice.' });
-    }
-
-    const deals = await fetchDeals(storeID as string, upperPrice as string);
-    return res.status(200).json(deals);
+      // Fetch deals or a single deal based on provided parameters
+      const deals = await fetchDeals(params);
+      return res.status(200).json(deals);
   } catch (error) {
-    console.error('Error fetching deals:', error);
-    return res.status(500).json({ error: 'Failed to fetch deals.' });
+      console.error('Error processing deals request:', error);
+      return res.status(500).json({ error: 'Failed to process deals request.' });
   }
 }
 
-export { getDeals };
+export { handleDealsRequest };
+
