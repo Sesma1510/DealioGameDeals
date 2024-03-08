@@ -12,21 +12,37 @@ const footer = () =>{
         <p className="ml-2">by Eduardo Sesma and Alexis Arellano</p>
       </div>
       <div className="flex justify-center">
-        <a
-          href="https://github.com/your-username"
+      <a
+          href="https://github.com/Sesma1510"
           target="_blank"
           rel="noopener noreferrer"
           className="text-gray-400 hover:text-white mx-4"
         >
-          GitHub
+          GitHub Eduardo
         </a>
         <a
-          href="https://linkedin.com/in/your-linkedin"
+          href="https://github.com/GustavoAlexisAre"
           target="_blank"
           rel="noopener noreferrer"
           className="text-gray-400 hover:text-white mx-4"
         >
-          LinkedIn
+          GitHub Alexis
+        </a>
+        <a
+          href="https://www.linkedin.com/in/esesma/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-400 hover:text-white mx-4"
+        >
+          LinkedIn Eduardo
+        </a>
+        <a
+          href="https://www.linkedin.com/in/alexisare/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-400 hover:text-white mx-4"
+        >
+          LinkedIn Alexis
         </a>
         {/* Agrega más enlaces según sea necesario */}
       </div>
