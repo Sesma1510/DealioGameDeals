@@ -1,56 +1,39 @@
 import { ModalProps } from '../../types/types';
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 
 interface ModalPropsWithEvent extends ModalProps {
-  onClose: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-  onMouseMove?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onClose: () => void;
+  onMouseLeave?: () => void;
+  modalRef: React.RefObject<HTMLDivElement>;
 }
 
-const Modal = ({ imageUrl, show, onClose, onMouseMove, top, left }: ModalPropsWithEvent) => {
-  const [modalStyle, setModalStyle] = useState({});
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (show) {
-      // Only set initial position, don't update it on cursor movement
-      const initialModalStyle = {
-        top: `${top}px`,
-        left: `${left}px`,
-        width: '200px', // Fixed width for the modal
-        height: 'auto', // Fixed height for the modal
-        pointerEvents: 'auto',
-      };
-      setModalStyle(initialModalStyle);
+const Modal = ({ imageUrl, show,  onMouseLeave, top, left, modalRef }: ModalPropsWithEvent) => {
+  const handleMouseLeave = () => {
+    if (onMouseLeave) {
+      onMouseLeave();
     }
-  }, [show, top, left]); // Depend on show to update the modal's initial position
-
-  const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (!modalRef.current || !onMouseMove) return;
-
-    onMouseMove(event);
   };
 
   if (!show) return null;
 
   return (
     <div
-      className="fixed z-50 inset-0"
-      onClick={(onClose as unknown) as React.MouseEventHandler<HTMLDivElement>}
-      style={{ pointerEvents: 'none' }} // Prevent modal background from catching mouse events
+      className="fixed inset-0"
+      style={{ pointerEvents: 'none' }} // Disable pointer events on the modal background
     >
       <div
         ref={modalRef}
-        className="absolute"
-        style={modalStyle}
-        onMouseMove={handleMouseMove} // Handle mouse move over the modal
+        className="absolute shadow-lg rounded-md"
+        style={{ top: `${top}px`, left: `${left}px`, width: 'auto', height: 'auto', pointerEvents: 'auto' }}
+        onMouseLeave={handleMouseLeave} // Handle mouse leave from the modal
       >
         <img
           src={imageUrl}
-          alt={""}
+          alt="Image"
           style={{
             maxWidth: '100%',
             maxHeight: '100%',
-            objectFit: 'contain',
+            objectFit: 'fill',
           }}
         />
       </div>
@@ -58,4 +41,4 @@ const Modal = ({ imageUrl, show, onClose, onMouseMove, top, left }: ModalPropsWi
   );
 };
 
-export default Modal;
+export { Modal };
