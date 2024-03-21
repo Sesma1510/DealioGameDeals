@@ -26,5 +26,26 @@ interface FetchDealsParams {
   output?: string;
 }
 
+export interface IDeal extends Document {
+  internalName: string;
+  title: string;
+  metacriticLink?: string;
+  dealID: string;
+  storeID: string;
+  gameID: string;
+  salePrice: number;
+  normalPrice: number;
+  isOnSale: boolean;
+  savings: number;
+  metacriticScore: number;
+  steamRatingText?: string;
+  steamRatingPercent: number;
+  steamRatingCount: number;
+  steamAppID: string;
+  releaseDate: number;
+  lastChange: number;
+  dealRating: number;
+  thumb: string;
+}
 
-export { RequestWithUser, FetchDealsParams }
+export { RequestWithUser, FetchDealsParams, IDeal }

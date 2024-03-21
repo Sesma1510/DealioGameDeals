@@ -1,39 +1,59 @@
+import axios from 'axios';
 import { Request, Response } from 'express';
-import { cache } from '../../middleware/cacheManager';
 import { getPagination } from '../../services/pagination';
-import { FetchDealsParams } from '../../types/types';
-import { fetchDeals } from '../../models/deal.model';
 
-async function handleDealsRequest(req: Request, res: Response) {
+const BASE_URL = 'https://www.cheapshark.com/api/1.0';
+
+async function fetchInitialDeals(req: Request, res: Response) {
+  const { pageNumber, pageSize } = getPagination(req.query);
+
   try {
-    const params: FetchDealsParams = Object.fromEntries(Object.entries(req.query)) as FetchDealsParams;
-    // Extract pagination parameters using getPagination or directly from req.query
-    const { skip, limit } = getPagination(req.query);
+    const response = await axios.get(`${BASE_URL}/deals`, {
+      params: {
+        pageNumber,
+        pageSize,
+      },
+    });
 
-    // Convert skip and limit to pageNumber and pageSize if necessary
-    const page = skip / limit + 1;
-    const pageSize = limit;
-
-    const cacheKey = JSON.stringify({ ...params, page, pageSize }); // Updated cacheKey to include pagination
-
-    // Try to get data from cache
-    const cachedDeals = cache.get(cacheKey);
-    if (cachedDeals) {
-      return res.status(200).json(cachedDeals);
-    }
-
-    // Fetch data from the external API if not cached, now including pagination parameters
-    const deals = await fetchDeals(params, page, pageSize);
-
-    // Save the fetched data in cache
-    cache.set(cacheKey, deals, 3600); // Cache for 1 hour
-
-    return res.status(200).json(deals);
+    res.status(200).json(response.data);
   } catch (error) {
-    console.error('Error processing deals request:', error);
-    return res.status(500).json({ error: 'Failed to process deals request.' });
+    console.error('Error fetching initial deals:', error);
+    res.status(500).json({ error: 'Failed to fetch initial deals.' });
   }
 }
 
-export { handleDealsRequest };
+async function fetchDealsOnUserQuery(req: Request, res: Response) {
+  const { title, storeID, upperPrice, lowerPrice, steamRating, metacritic, sortBy, onSale, pageNumber } = req.query;
 
+  try {
+    const params: any = {
+      title,
+      storeID,
+      upperPrice,
+      lowerPrice,
+      steamRating,
+      metacritic,
+      onSale,
+      pageNumber,
+    };
+
+    Object.keys(params).forEach(key => {
+      if (params[key] === undefined || params[key] === '') {
+        delete params[key];
+      }
+    });
+
+    if (sortBy) {
+      params.sortBy = sortBy;
+    }
+
+    const response = await axios.get(`${BASE_URL}/deals`, { params });
+
+    res.status(200).json(response.data);
+  } catch (error) {
+    console.error('Error fetching deals on user query:', error);
+    res.status(500).json({ error: 'Failed to fetch deals on user query.' });
+  }
+}
+
+export  { fetchInitialDeals, fetchDealsOnUserQuery };

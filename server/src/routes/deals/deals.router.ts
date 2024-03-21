@@ -1,10 +1,10 @@
 import * as express from 'express';
-import { getPagination } from '../../services/pagination';
-import { handleDealsRequest } from './deals.controller';
+import { fetchInitialDeals, fetchDealsOnUserQuery} from './deals.controller';
 
 
 const dealsRouter = express.Router();
 
-dealsRouter.get('/', handleDealsRequest)
+dealsRouter.get('/initial', fetchInitialDeals );
+dealsRouter.get('/search', fetchDealsOnUserQuery );
 
 export { dealsRouter };

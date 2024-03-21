@@ -1,41 +1,33 @@
-import axios from "axios";
-import { FetchDealsParams } from "../types/types";
+import { IDeal } from '../types/types';
+import { Schema, model } from 'mongoose';
 
-const BASE_URL = 'https://www.cheapshark.com/api';
-const API_VERSION = '1.0';
+const DealSchema: Schema = new Schema({
+  internalName: { type: String, required: true, trim: true },
+  title: { type: String, required: true, trim: true },
+  metacriticLink: { type: String, trim: true },
+  dealID: { type: String, required: true, unique: true, trim: true },
+  storeID: { type: String, required: true, trim: true },
+  gameID: { type: String, required: true, trim: true },
+  salePrice: { type: Number, required: true, min: 0 },
+  normalPrice: { type: Number, required: true, min: 0 },
+  isOnSale: { type: Boolean, required: true },
+  savings: { type: Number, required: true },
+  metacriticScore: { type: Number },
+  steamRatingText: { type: String },
+  steamRatingPercent: { type: Number },
+  steamRatingCount: { type: Number },
+  steamAppID: { type: String, required: false },
+  releaseDate: { type: Number, required: true },
+  lastChange: { type: Number, required: true },
+  dealRating: { type: Number, required: true },
+  thumb: { type: String, required: true, trim: true },
+}, { timestamps: true });
 
-// Update function signature to accept pagination parameters
-async function fetchDeals(params: FetchDealsParams, page?: number, pageSize?: number) {
-  try {
-    // Adjust params for the deals list to include pagination if provided
-    const paginationParams = page && pageSize ? { pageNumber: page, pageSize } : {};
+// Indexes
+DealSchema.index({ title: 'text', internalName: 'text', steamRatingText: 'text' });
 
-    if (params.dealID) {
-      const dealDetailsEndpoint = `${BASE_URL}/${API_VERSION}/deal`;
-      const response = await axios.get(dealDetailsEndpoint, { params: { id: params.dealID } });
+const Deal = model<IDeal>('Deal', DealSchema);
 
-      if (response.status === 200) {
-        return [response.data]; // Wrapping in an array for consistency
-      } else {
-        console.log("Failed to fetch deal by ID. Status:", response.status);
-        return [];
-      }
-    }
+export { Deal };
 
-    const dealsListEndpoint = `${BASE_URL}/${API_VERSION}/deals`;
-    // Combine original params with paginationParams
-    const response = await axios.get(dealsListEndpoint, { params: { ...params, ...paginationParams } });
 
-    if (response.status === 200) {
-      return response.data;
-    } else {
-      console.log("Failed to fetch deals. Status:", response.status);
-      return [];
-    }
-  } catch (error) {
-    console.error('Error fetching deals from CheapShark:', error);
-    throw error;
-  }
-}
-
-export { fetchDeals };

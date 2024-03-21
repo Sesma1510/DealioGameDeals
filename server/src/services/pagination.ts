@@ -1,14 +1,13 @@
-const DEFAULT_PAGE_NUMBER = 1;
-const DEFAULT_PAGE_LIMIT = 10;
+const DEFAULT_PAGE_NUMBER = 0;
+const DEFAULT_PAGE_SIZE = 60;
 
 const getPagination = (query) => {
-  const page = Math.max(Math.abs(query.page) || DEFAULT_PAGE_NUMBER, 1);
-  const limit = Math.abs(query.limit) || DEFAULT_PAGE_LIMIT;
-  const skip = (page - 1) * limit;
+  const pageNumber = Math.max(Math.abs(parseInt(query.pageNumber, 10)) || DEFAULT_PAGE_NUMBER, 0);
+  const pageSize = Math.min(Math.abs(parseInt(query.pageSize, 10)) || DEFAULT_PAGE_SIZE, 60);
 
   return {
-    skip,
-    limit,
+    pageNumber,
+    pageSize,
   };
 };
 
