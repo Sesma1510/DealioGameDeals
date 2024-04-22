@@ -10,3 +10,17 @@ body {
 ::after {
   border-width: 0;
 }
+
+/* In your Tailwind CSS configuration or global CSS */
+@keyframes scroll-left-loop {
+  0% {
+    transform: translateX(100%); /* Start from the right off-screen */
+  }
+  100% {
+    transform: translateX(-100%); /* Move to the left off-screen */
+  }
+}
+
+.animate-scroll-left-loop {
+  animation: scroll-left-loop 10s linear infinite; /* Speed and infinite loop */
+}

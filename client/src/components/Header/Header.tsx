@@ -1,16 +1,22 @@
-import { FunctionComponent } from "react";
+import React from "react";
+import { HeroStyleProps } from "../../types/types";
+import background from "../../assets/background.jpg"; // Ensure correct path
 
-const Header: FunctionComponent = () => {
+const Header: React.FC<HeroStyleProps> = ({ title, scrollingText }) => {
   return (
-    <section className="self-stretch bg-link-primary overflow-hidden flex flex-col items-center justify-start py-[321.5px] px-5 box-border gap-[40px] max-w-full text-center text-37xl text-gainsboro-200 font-text-tiny-link mq450:gap-[20px_40px] mq750:pt-[136px] mq750:pb-[136px] mq750:box-border mq1050:pt-[209px] mq1050:pb-[209px] mq1050:box-border">
-      <div className="w-[768px] flex flex-col items-start justify-start gap-[24px] max-w-full">
-        <h1 className="m-0 self-stretch relative text-inherit leading-[120%] font-bold font-inherit mq450:text-15xl mq450:leading-[40px] mq750:text-26xl mq750:leading-[54px]">
-          Find the Best Deals on Video Games with Dealio
-        </h1>
-        <div className="self-stretch relative text-lg leading-[150%] text-color-neutral-white">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-          varius enim in eros elementum tristique. Duis cursus, mi quis viverra
-          ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat.
+    <section
+      className="bg-cover bg-center text-center w-svw "
+      style={{ backgroundImage: `url(${background})`, height: "80vh" }}
+    >
+      <div className="container ml-80 flex flex-col items-start justify-center h-full ">
+        <div className="relative text-center">
+          <h1 className="text-white text-26xl uppercase">{title}</h1>
+          <div className="mt-6 w-full overflow-hidden relative">
+            <div className="flex whitespace-nowrap animate-scroll-left-loop justify-center">
+              {" "}
+              <div className="text-white text-10xl">{scrollingText}</div>{" "}
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -3,7 +3,12 @@ interface Store {
   storeName: string;
   image: string;
 }
-;
+
+interface HeroStyleProps {
+  title: string;
+  scrollingText: string;
+}
+
 type ModalProps = {
   imageUrl: string;
   show: boolean;
@@ -11,7 +16,6 @@ type ModalProps = {
   top: number;
   left: number;
 };
-
 
 interface DataType {
   dealID: string;
@@ -72,5 +76,12 @@ export interface QueryParams extends SearchParams {
   [key: string]: string | number | boolean | undefined;
 }
 
-
-export { Game, Store, ModalProps, DataType, SearchParams, QueryParams };
+export {
+  Game,
+  Store,
+  ModalProps,
+  DataType,
+  SearchParams,
+  QueryParams,
+  HeroStyleProps,
+};
