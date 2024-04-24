@@ -4,6 +4,10 @@ interface Store {
   image: string;
 }
 
+interface ScrollingTextProps {
+  text: string; // Define el tipo como cadena
+}
+
 interface HeroStyleProps {
   title: string;
   scrollingText: string;
@@ -84,4 +88,5 @@ export {
   SearchParams,
   QueryParams,
   HeroStyleProps,
+  ScrollingTextProps,
 };
