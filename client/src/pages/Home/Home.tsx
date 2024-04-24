@@ -24,7 +24,7 @@ const Home: FunctionComponent = () => {
   return (
     <div className="w-full">
       <header
-        className={`fixed w-full top-0 left-0 p-6 flex items-center justify-between shadow transition-colors duration-150 ${isScrolled ? "bg-black" : "bg-transparent"}`}
+        className={`fixed w-full top-0 left-0 p-6 flex items-center justify-between shadow transition-colors duration-150 ${isScrolled ? "bg-blue-background" : "bg-transparent"}`}
         style={{ zIndex: 999 }}
       >
         <img
@@ -50,7 +50,7 @@ const Home: FunctionComponent = () => {
         title="Dealio Game Deals"
         scrollingText="Find the best game deals here!"
       />
-      <div className="bg-black">
+      <div className="bg-blue-background">
         <Table />
       </div>
     </div>

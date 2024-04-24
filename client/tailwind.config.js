@@ -4,14 +4,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        "blue-background": "#101B21",
         "color-neutral-white": "#fff",
         "link-primary": "#000",
         "color-neutral-neutral": "#666",
         gainsboro: {
-          "100": "#e6e6e6",
-          "200": "#e5e5e5",
-          "300": "#d9d9d9",
-          "400": "rgba(230, 230, 230, 0.09)",
+          100: "#e6e6e6",
+          200: "#e5e5e5",
+          300: "#d9d9d9",
+          400: "rgba(230, 230, 230, 0.09)",
         },
         gray: "#14213d",
         orange: "#fca311",
