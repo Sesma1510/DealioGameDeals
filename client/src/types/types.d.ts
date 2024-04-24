@@ -9,7 +9,7 @@ interface ScrollingTextProps {
 }
 
 interface HeroStyleProps {
-  title: string;
+  title: React.ReactNode;
   scrollingText: string;
 }
 

@@ -20,10 +20,14 @@ const ScrollingCanvas: React.FC<ScrollingTextProps> = ({ text }) => {
     const speed = 0.5; // Ajusta la velocidad aquí (menor valor = más lento)
     const gap = 60; // Espacio entre los dos textos
 
-    ctx.font = "20px Arial";
-    ctx.fillStyle = "white";
-
+    ctx.font = "30px Arial";
+    ctx.fillStyle = "black";
     const textWidth = ctx.measureText(text).width;
+
+    const resizeCanvas = () => {
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
+    };
 
     const draw = () => {
       if (!ctx) {
@@ -56,10 +60,21 @@ const ScrollingCanvas: React.FC<ScrollingTextProps> = ({ text }) => {
     // Establecer la posición inicial del segundo texto
     xPos2 = textWidth + gap;
 
+    // Ajustar el tamaño del canvas al cargar la página
+    resizeCanvas();
+
+    // Ajustar el tamaño del canvas al cambiar el tamaño de la ventana
+    window.addEventListener("resize", resizeCanvas);
+
     draw();
+
+    // Limpiar el evento de resize al desmontar el componente
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+    };
   }, [text]);
 
-  return <canvas ref={canvasRef} width={500} height={100} />;
+  return <canvas ref={canvasRef} style={{ width: "100%", height: "100px" }} />;
 };
 
 export default ScrollingCanvas;

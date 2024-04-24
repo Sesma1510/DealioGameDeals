@@ -10,3 +10,13 @@ body {
 ::after {
   border-width: 0;
 }
+
+.blur-border {
+  backdrop-filter: blur(10px);
+  border: 50px solid transparent; /* Ajusta el ancho del borde según sea necesario */
+  border-radius: 1rem;
+}
+
+.image-container {
+  overflow: hidden; /* Asegura que el desenfoque solo se aplique al área delimitada por el contenedor */
+}
